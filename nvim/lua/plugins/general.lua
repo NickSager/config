@@ -6,7 +6,7 @@ return {
       ensure_installed = {
         "stylua",
         "shfmt",
-        "python-lsp-server",
+        -- "python-lsp-server",
         -- "shellcheck",
         -- "flake8",
         -- "black",
@@ -16,8 +16,75 @@ return {
       },
     },
   },
+
+  {
+    "mbbill/undotree",
+    lazy = false, -- needs to be explicitly set, because of the keys property
+    keys = {
+      {
+        "<leader>U",
+        vim.cmd.UndotreeToggle,
+        desc = "Toggle undotree",
+      },
+    },
+  },
+
+  {
+    "linux-cultist/venv-selector.nvim",
+    dependencies = { "neovim/nvim-lspconfig", "nvim-telescope/telescope.nvim", "mfussenegger/nvim-dap-python" },
+    opts = {
+      -- Your options go here
+      dap_enabled = true,
+      -- name = { "venv", ".venv", "env", ".env" },
+      -- poetry_path= "~/.cache/pypoetry/virtualenvs/"
+      -- auto_refresh = false
+    },
+  },
+
+  -- {
+  --   "linux-cultist/venv-selector.nvim",
+  --   branch = "regexp", -- Use this branch for the new version
+  --   cmd = "VenvSelect",
+  --   enabled = function()
+  --     return LazyVim.has("telescope.nvim")
+  --   end,
+  --   opts = {
+  --     settings = {
+  --       options = {
+  --         notify_user_on_venv_activation = true,
+  --       },
+  --     },
+  --   },
+  --   --  Call config for python files and load the cached venv automatically
+  --   ft = "python",
+  --   keys = { { "<leader>cv", "<cmd>:VenvSelect<cr>", desc = "Select VirtualEnv", ft = "python" } },
+  -- },
+
+  -- TODO: setup neotest (https://github.com/nvim-neotest/neotest)
+  -- Included in lazyextras
+  -- {
+  -- "nvim-neotest/neotest",
+  -- dependencies = {
+  --   "nvim-lua/plenary.nvim",
+  --   "antoinemadec/FixCursorHold.nvim",
+  --   "nvim-treesitter/nvim-treesitter"
+  --   }
+  -- },
   --
-  -- add pyright to lspconfig
+  --
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    build = ":Copilot auth",
+    opts = {
+      suggestion = { enabled = true },
+      panel = { enabled = false },
+      filetypes = {
+        markdown = true,
+        help = true,
+      },
+    },
+  },
   {
     "neovim/nvim-lspconfig",
     ---@class PluginLspOpts
@@ -25,9 +92,10 @@ return {
       ---@type lspconfig.options
       servers = {
         -- pyright will be automatically installed with mason and loaded with lspconfig
-        -- pyright = {},
+        pyright = { enabled = true },
         -- pylsp = {},
         pylsp = {
+          enabled = false,
           settings = {
             pylsp = {
               plugins = {

@@ -30,15 +30,19 @@ return {
       { "<leader>QE", ":lua require'otter'.export(true)<cr>", desc = "quarto export overwrite" },
       { "<leader>Qrr", ":QuartoSendAbove<cr>", desc = "quarto run to cursor" },
       { "<leader>Qra", ":QuartoSendAll<cr>", desc = "quarto run all" },
-      { "<leader><cr>", ":SlimeSend<cr>", desc = "send code chunk" },
-      { "<c-cr>", ":SlimeSend<cr>", desc = "send code chunk" },
+      -- { "<leader><cr>", ":SlimeSend<cr>", desc = "send code chunk" },
+      -- { "<c-cr>", ":SlimeSend<cr>", desc = "send code chunk" },
+      { "<leader><cr>", "<Plug>SlimeSendCell<cr>", desc = "send code cell" },
+      { "<c-cr>", "<Plug>SlimeSendCell<cr>", desc = "send code cell" }, -- TODO: This is not working after adding leader-cr
+      -- { "<c-cr>", "<Plug>SlimeSendCell<cr>/' . vim.g.slime_cell_delimiter . <CR>:nohlsearch<CR>", desc = "send code cell" }, --TODO: debug finding next cell
       { "<c-cr>", "<esc>:SlimeSend<cr>i", mode = "i", desc = "send code chunk" },
       { "<c-cr>", "<Plug>SlimeRegionSend<cr>", mode = "v", desc = "send code chunk" },
       { "<cr>", "<Plug>SlimeRegionSend<cr>", mode = "v", desc = "send code chunk" },
-      { "<leader>Qtr", ":split term://R<cr>", desc = "terminal: R" },
-      { "<leader>Qti", ":split term://ipython<cr>", desc = "terminal: ipython" },
-      { "<leader>Qtp", ":split term://python<cr>", desc = "terminal: python" },
-      { "<leader>Qtj", ":split term://julia<cr>", desc = "terminal: julia" },
+      { "<leader>Qtr", ":vsplit term://R<cr>", desc = "terminal: R" },
+      { "<leader>Qti", ":vsplit term://ipython<cr>", desc = "terminal: ipython" },
+      { "<leader>Qtp", ":vsplit term://python<cr>", desc = "terminal: python" },
+      { "<leader>Qtj", ":vsplit term://julia<cr>", desc = "terminal: julia" },
+      { "<leader>Qtt", ":vsplit | terminal<cr>", desc = "terminal: terminal" },
       { "<leader>Qoo", "o# %%<cr>", desc = "new code chunk below" },
       { "<leader>QoO", "O# %%<cr>", desc = "new code chunk above" },
       { "<leader>Qob", "o```{bash}<cr>```<esc>O", desc = "bash code chunk" },
@@ -53,6 +57,7 @@ return {
     opts = {
       buffers = {
         set_filetype = true,
+        write_to_disk = true,
       },
     },
   },
@@ -83,6 +88,7 @@ return {
       call v:lua.Quarto_is_in_python_chunk()
       if exists('g:slime_python_ipython') && len(split(a:text,"\n")) > 1 && b:quarto_is_python_chunk
       return ["%cpaste -q\n", g:slime_dispatch_ipython_pause, a:text, "--", "\n"]
+      " return [g:slime_dispatch_ipython_pause, a:text, "\n"]
       else
       return a:text
       end
@@ -99,8 +105,11 @@ return {
       end
 
       -- slime, neovvim terminal
+      -- vim.g.slime_target = "tmux"
+      vim.g.slime_cell_delimiter = "# %%" -- use :SlimeSendCell
       vim.g.slime_target = "neovim"
       vim.g.slime_python_ipython = 1
+      vim.g.slime_bracketed_paste = 1
 
       require("which-key").register({
         ["<leader>Qtm"] = { mark_terminal, "mark terminal" },
