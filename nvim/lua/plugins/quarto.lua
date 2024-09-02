@@ -111,10 +111,10 @@ return {
       vim.g.slime_python_ipython = 1
       vim.g.slime_bracketed_paste = 1
 
-      require("which-key").register({
-        ["<leader>Qtm"] = { mark_terminal, "mark terminal" },
-        ["<leader>Qts"] = { set_terminal, "set terminal" },
-      })
+      -- require("which-key").register({
+      --   ["<leader>Qtm"] = { mark_terminal, "mark terminal" },
+      --   ["<leader>Qts"] = { set_terminal, "set terminal" },
+      -- })
     end,
   },
 
