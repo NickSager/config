@@ -8,3 +8,4 @@ local opt = vim.opt
 opt.conceallevel = 0
 opt.spell = true -- Enable spell checking
 opt.wrap = true -- Enable line wrap
+opt.laststatus = 3 -- Recommended for Avante
